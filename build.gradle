@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.gradleup.shadow' version '9.0.0' //We use the Shadow plugin because it packages your application and all runtime dependencies (like Gson) into one JAR.
 }
 
 application {
