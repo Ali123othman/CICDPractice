@@ -24,3 +24,10 @@ dependencies {
 test {
     useJUnitPlatform() // testing
 }
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'Ali.Main'
+        )
+    }
+}
