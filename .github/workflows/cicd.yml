@@ -8,6 +8,12 @@ on:
   pull_request:
     branches: ["main"]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
 
@@ -15,6 +21,7 @@ jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
 
@@ -29,6 +36,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+          cache: gradle
 
 
       # Linux runners need execute permission for Gradle wrapper
@@ -40,6 +48,14 @@ jobs:
       - name: Build project and run tests
         run: ./gradlew build
 
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+            name: test-reports
+            path: build/reports/tests/
+            if-no-files-found: ignore
+
 
       # Save the generated JAR so the Docker job can use the same build output
       - name: Upload JAR artifact
@@ -47,6 +63,7 @@ jobs:
         with:
           name: app-jar
           path: build/libs/*-all.jar
+          if-no-files-found: error
 
 
 
@@ -61,7 +78,7 @@ jobs:
     if: github.event_name == 'push'
 
     runs-on: ubuntu-latest
-
+    timeout-minutes: 15
     steps:
 
       # Get the repository files, including the Dockerfile
