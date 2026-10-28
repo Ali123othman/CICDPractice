@@ -135,3 +135,24 @@ jobs:
       # run: |
       #   docker push ${{ secrets.DOCKER_USERNAME }}/cicdpractice:${{ github.run_number }}
       #  docker push ${{ secrets.DOCKER_USERNAME }}/cicdpractice:latest
+  # Tell Render to pull and run the image we just pushed
+  deploy:
+    name: Deploy to Render
+    needs: docker
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: production
+    concurrency:
+      group: production-deploy
+      cancel-in-progress: false
+
+    steps:
+      - name: Trigger Render deploy
+        env:
+          HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+          IMAGE: ${{ secrets.DOCKER_USERNAME }}/cicdpractice
+          TAG: ${{ github.sha }}
+        run: |
+          curl --fail -sS -X POST -G "$HOOK" \
+            --data-urlencode "imgURL=docker.io/$IMAGE:$TAG"
