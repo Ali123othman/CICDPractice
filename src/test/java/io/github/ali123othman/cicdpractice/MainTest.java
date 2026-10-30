@@ -1,4 +1,4 @@
-package Ali;
+package io.github.ali123othman.cicdpractice;
 
 import org.junit.jupiter.api.Test;
 

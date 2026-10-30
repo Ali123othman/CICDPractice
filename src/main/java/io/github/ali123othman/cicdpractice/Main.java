@@ -1,4 +1,4 @@
-package Ali;
+package io.github.ali123othman.cicdpractice;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpServer;
