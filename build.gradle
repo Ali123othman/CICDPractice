@@ -5,10 +5,10 @@ plugins {
 }
 
 application {
-    mainClass = 'Ali.Main'
+    mainClass = 'io.github.ali123othman.cicdpractice.Main'
 }
 
-group = 'Ali'
+group = 'io.github.ali123othman.cicdpractice'
 version = '1.0-SNAPSHOT'
 
 repositories {
@@ -28,7 +28,7 @@ test {
 jar {
     manifest {
         attributes(
-                'Main-Class': 'Ali.Main'
+                'Main-Class': 'io.github.ali123othman.cicdpractice.Main'
         )
     }
 }
